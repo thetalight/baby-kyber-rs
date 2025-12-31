@@ -5,7 +5,6 @@ use crate::poly::Polynomial;
 use serde::{Deserialize, Serialize};
 use std::fmt::{Debug, Display};
 use std::ops::{Add, AddAssign, Div, Mul, MulAssign, Neg, Rem, Sub, SubAssign};
-use std::random::Random;
 
 /// Ring of integers mod q
 pub trait Ring:
@@ -30,7 +29,6 @@ pub trait Ring:
     + Eq
     + Ord
     + PartialOrd
-    + Random
     + From<u64>
     + Send
     + Sync

@@ -1,4 +1,3 @@
-#![feature(random)]
 pub mod baby_kyber;
 pub mod debug;
 pub mod matrix;

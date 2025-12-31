@@ -1,10 +1,8 @@
 use crate::ring::Ring;
-use rand::RngCore;
+use rand::{Rng, RngCore};
 use serde::{Deserialize, Serialize};
-use std::cmp::Ordering;
 use std::fmt::*;
 use std::ops::{Add, AddAssign, Div, Mul, MulAssign, Neg, Sub, SubAssign};
-use std::random::{Random, RandomSource};
 
 // Z_q: Ring of integers mod q
 #[derive(Debug, Copy, Clone, PartialEq, Ord, PartialOrd, Eq, Serialize, Deserialize)]
@@ -40,13 +38,12 @@ impl Zq {
             Some(((t + m as i64) % m as i64) as u64)
         }
     }
-}
 
-impl Random for Zq {
-    fn random(source: &mut (impl RandomSource + ?Sized)) -> Self {
-        Self::new(u64::random(source))
+    fn random<R: Rng + ?Sized>(rng: &mut R) -> Self {
+        Self::new(rng.r#gen::<u64>())
     }
 }
+
 
 impl Ring for Zq {
     const MODULUS: u64 = 17;
@@ -203,7 +200,6 @@ impl Display for Zq {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use std::random::DefaultRandomSource;
 
     #[test]
     fn test_new_Zq() {
@@ -213,7 +209,7 @@ mod tests {
 
     #[test]
     fn test_Zq_to_string_and_display() {
-        let mut rng = DefaultRandomSource::default();
+        let mut rng = rand::thread_rng();
         let lhs = Zq::random(&mut rng);
         let str = lhs.to_string();
         println!("{:?}", lhs);
